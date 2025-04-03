@@ -5,6 +5,7 @@ import mongoose from "mongoose";
     password:{type:String,required:true},
     about:{type:String},
     tags:{type:[String]},
+    googleId: { type: String },
     joinedon:{type:Date,default:Date.now}
  })
 

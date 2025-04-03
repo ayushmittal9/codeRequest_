@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API=axios.create({
-    baseURL:"http://localhost:5000"
+    baseURL:"https://coderequest-1.onrender.com"
 });
 API.interceptors.request.use((req)=>{
     if(localStorage.getItem("Profile")){
@@ -12,10 +12,12 @@ API.interceptors.request.use((req)=>{
     return req;
 })
 
-export const login=(authdata)=>API.post("user/login",authdata);
-export const signup=(authdata)=>API.post("user/signup",authdata);
+export const login=(authdata)=>API.post("user/login",authdata);//
+export const signup=(authdata)=>API.post("user/signup",authdata);//
 export const getallusers=()=> API.get("/user/getallusers");
-export const updateprofile=(id,updatedata)=>API.patch(`user/update/${id}`,updatedata)
+export const googleLogin = (userData) => API.post("/auth/google-login", userData);
+
+export const updateprofile=(id,updatedata)=>API.patch(`user/update/${id}`,updatedata)//
 
 
 export const postquestion=(questiondata)=>API.post("/questions/Ask",questiondata);

@@ -22,3 +22,15 @@ export const login =(authdata,naviagte)=> async(dispatch)=>{
         console.log(error)
     }
 }
+
+export const googleLogin = (userData, navigate) => async (dispatch) => {
+    try {
+        const { data } = await api.googleLogin(userData); // Call API
+        dispatch({ type: "AUTH", data }); // Dispatch auth action
+        dispatch(setcurrentuser(data)); // Set current user
+        localStorage.setItem("Profile", JSON.stringify(data)); // Save in local storage
+        navigate("/"); // Redirect to homepage
+    } catch (error) {
+        console.error("Google Login Error:", error);
+    }
+};

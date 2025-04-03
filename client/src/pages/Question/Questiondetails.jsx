@@ -17,7 +17,7 @@ const Questiondetails = () => {
   const dispatch=useDispatch()
   const location = useLocation();
   const navigate = useNavigate();
-  const url = "http://localhost:3000";
+  const url = "https://coderequest-1.onrender.com";
   const user = useSelector((state)=>state.currentuserreducer);
   const handlepostans = (e, answerlength) => {
     e.preventDefault();

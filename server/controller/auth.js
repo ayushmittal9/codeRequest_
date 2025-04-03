@@ -50,3 +50,26 @@ export const login = async (req, res) => {
         return
     }
 }
+
+export const googleLogin = async (req, res) => {
+    const { name, email, googleId } = req.body;
+    console.log(req.body)
+
+    try {
+        let user = await users.findOne({ email });
+
+        if (!user) {
+            user = await users.create({ name, email, googleId });
+        }
+
+        const token = jwt.sign(
+            { email: user.email, id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+        console.log(user)
+        res.status(200).json({ result: user, token });
+    } catch (error) {
+        res.status(500).json({ message: "Something went wrong" });
+    }
+};

@@ -15,7 +15,7 @@ export default function Navbar(handleslidein) {
   const dispatch = useDispatch();
   const handlelogout = () => {
     dispatch({ type: "LOGOUT" });
-    navigate("/");
+    navigate("/Auth");
     dispatch(setcurrentuser(null));
   };
 

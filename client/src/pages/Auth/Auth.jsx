@@ -1,17 +1,20 @@
-import React,{useState}from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import './Auth.css'
-import icon from "../../assets/icon.png"
-import Aboutauth from './Aboutauth'
-import { signup, login } from '../../action/auth'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
+import icon from "../../assets/icon.png";
+import Google from "../../assets/google-brands-solid.svg";
+import Aboutauth from "./Aboutauth";
+import { signup, login , googleLogin} from "../../action/auth";
+import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 function Auth() {
-    const [isSignup, setIsSignup] = useState(false);
-    const [name, setName] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSwitch = () => {
     setIsSignup(!isSignup);
@@ -19,7 +22,6 @@ function Auth() {
     setEmail("");
     setPassword("");
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,12 +32,63 @@ function Auth() {
       if (!name) {
         alert("Enter a name to continue");
       }
-      dispatch(signup({ name, email, password }, navigate))
+      dispatch(signup({ name, email, password }, navigate));
     } else {
-      dispatch(login({ email, password }, navigate))
+      dispatch(login({ email, password }, navigate));
     }
   };
 
+  const Login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log("Google Login Successful:", tokenResponse);
+      
+      try {
+        // Fetch user details using the access token
+        const userInfo = await axios.get("https://www.googleapis.com/oauth2/v2/userinfo", {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+  
+        console.log("User Info:", userInfo.data); // Check if data is received
+  
+        const userData = {
+          name: userInfo.data.name,
+          email: userInfo.data.email,
+          googleId: userInfo.data.id,
+        };
+  
+        // Dispatch Google Login Action
+        dispatch(googleLogin(userData, navigate));
+      } catch (error) {
+        console.error("Error during Google login:", error);
+      }
+    },
+    onError: (error) => console.log("Google Login Failed:", error),
+  });
+  
+/**
+  const Login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Fetch user details using the access token
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+  
+        const userData = {
+          name: userInfo.data.name,
+          email: userInfo.data.email,
+          googleId: userInfo.data.id,
+        };
+  
+        // Dispatch Google Login Action
+        dispatch(googleLogin(userData, navigate));
+      } catch (error) {
+        console.error("Error during Google login:", error);
+      }
+    },
+    onError: (error) => console.log("Google Login Failed:", error),
+  });   **/
+  
 
   return (
     <section className="auth-section">
@@ -91,6 +144,10 @@ function Auth() {
           <button type="submit" className="auth-btn">
             {isSignup ? "Sign up" : "Log in"}
           </button>
+          <div className="google-auth singlt-option" onClick={()=>Login()}>
+            <img src={Google} alt="" />
+            <p>Login with Google</p>
+          </div>
         </form>
         <p>
           {isSignup ? "Already have an account?" : "Don't have an account?"}
@@ -104,7 +161,7 @@ function Auth() {
         </p>
       </div>
     </section>
-  )
+  );
 }
 
-export default Auth
+export default Auth;

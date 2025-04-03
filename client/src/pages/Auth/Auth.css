@@ -87,6 +87,41 @@
     font-size: 13px;
     cursor: pointer;
   }
+
+  .google-auth {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    align-items: center;
+  }
+  
+  .singlt-option {
+    gap: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .google-auth:hover{
+    background-color: #f1f2f3;
+  }
+  
+  .singlt-option img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .singlt-option p {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+  
   
   @media screen and (max-width: 820px) {
     .auth-container-1 {
